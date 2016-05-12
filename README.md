@@ -1,0 +1,3 @@
+# solrexample
+
+solrj project
