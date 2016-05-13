@@ -12,7 +12,7 @@ import org.apache.solr.common.SolrInputDocument;
 public class SolrController {
 	
 	private final String url="http://localhost:8983/solr/core1";
-	private SolrClient client;
+	private static SolrClient client;
 	
 	private Collection<SolrInputDocument> docs;
 	
@@ -32,7 +32,7 @@ public class SolrController {
 		} catch (IOException e) {
 			System.out.println("Add documents: IO exception"+e.getMessage());
 		}
-		System.out.println("add field and commit");
+		System.out.println("add "+field +" and commit");
 	}
 
 }
