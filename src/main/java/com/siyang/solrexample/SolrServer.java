@@ -6,9 +6,9 @@ import java.net.URI;
 import java.net.UnknownHostException;
 
 import javax.ws.rs.core.UriBuilder;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.api.core.ResourceConfig;
+
+import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
 import com.sun.net.httpserver.*;
 
 @SuppressWarnings("restriction")
@@ -16,13 +16,13 @@ public class SolrServer {
 	
 	public void startServer() throws IllegalArgumentException, IOException{
 		HttpServer server=createHttpServer();
-		server.start();
+		//server.start();
 		System.out.println(String.format("server starts: %s", getURL()));
 	}
 	
 	private HttpServer createHttpServer() throws IllegalArgumentException, IOException{
-		ResourceConfig rc=new PackagesResourceConfig("com.siyang.solrexample");
-		return HttpServerFactory.create(getURL(), rc);
+		ResourceConfig rc=new ResourceConfig(SolrClient.class);
+		return JdkHttpServerFactory.createHttpServer(getURL(), rc);
 	}
 	
 	private URI getURL(){
