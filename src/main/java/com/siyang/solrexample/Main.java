@@ -1,17 +1,17 @@
 package com.siyang.solrexample;
 
-import java.io.IOException;
-
-import org.apache.solr.client.solrj.SolrServerException;
+import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) throws SolrServerException, IOException {
-		/*
-		 * non-finished
-			SolrController sc=new SolrController();
-		*/
+	public static void main(String[] args) {
+		//non-finished
+		SolrController sc=new SolrController();
+		List<String> cat=new ArrayList<String>();
+		cat.add("book");
+		cat.add("hardcover");
 		
+		sc.excute("id", "1");
+		sc.excute("cat", cat);
 	}
-
 }
