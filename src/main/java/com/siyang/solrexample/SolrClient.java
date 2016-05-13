@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
@@ -24,6 +25,7 @@ public class SolrClient {
 	
 	public SolrClient(){
 		gson=new GsonBuilder().setPrettyPrinting().create();
+		client=ClientBuilder.newClient();
 	}
 	
 	@GET
@@ -34,24 +36,21 @@ public class SolrClient {
 	}
 	
 	@GET
-	@Path("/search")
+	@Path("/{core}/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String searchById(@QueryParam("id") String id){
-		System.out.println("search by id: "+id);
-		client=ClientBuilder.newClient();
-		wt=client.target("http://localhost:8983/solr/core2/select").queryParam("indent", "on").queryParam("q", "id:"+id).queryParam("wt", "json");
+	public String search(@QueryParam("q") String q, @PathParam("core") String core){
+		System.out.println("search: "+"q="+q);
+		wt=client.target("http://localhost:8983/solr/"+core+"/select").queryParam("indent", "on").queryParam("q", q).queryParam("wt", "json");
 		System.out.println(wt.getUri());
 		response=wt.request(MediaType.APPLICATION_JSON).get(String.class);
 		return response;
 	}
 	
-	
 	@POST
 	@Path("/field")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String addField(String json){
-		Field field=gson.fromJson(json, Field.class);
-		displayField(field);
+		//Field field=gson.fromJson(json, Field.class);
 		
 		//call schema api(add field)
 		/*
@@ -59,13 +58,5 @@ public class SolrClient {
 		WebTarget wt=client.target("http://localhost:8983/solr/core1/schema");
 		response = wt.request(MediaType.APPLICATION_JSON).post(Entity.json(json));*/
 		return gson.toJson(response);
-	}
-	
-	private void displayField(Field field){
-		System.out.println(field.getName());
-		System.out.println(field.getType());
-		System.out.println(field.isIndexed());
-		System.out.println(field.isStored());
-		System.out.println(field.isMultiValued());
 	}
 }
